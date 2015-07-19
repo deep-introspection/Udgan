@@ -46,7 +46,7 @@ def convert_mat_structure(data_path):
     assert len(eeg_idx) == len(pos)
 
     chs = info['chs']
-    for ii, (ch, pos_) in enumerate(zip(chs, pos)):
+    for ii, (ch, pos_) in enumerate(zip(chs, np.vstack([np.zeros([2,3]),pos]))):
         if ii not in eeg_idx:
             continue
         ch['loc'] = np.array([0, 0, 0, 1] * 3, dtype='f4')
@@ -55,7 +55,7 @@ def convert_mat_structure(data_path):
     dtype = [('channel', 'O'), ('x', 'f8'), ('y', 'f8'), ('z', 'f8')]
     pos_dig = np.loadtxt('data/Udgan_190210.pol', dtype=dtype)
 
-    fiducials = np.concatenate([pos_dig[:3], pos_dig[-7:]])
+    fiducials = np.concatenate([pos_dig[:6], pos_dig[-6:]])
     fiducials = np.array([fiducials['x'], fiducials['y'],
                           fiducials['z']]).T
     fiducials = fiducials[:-1]
